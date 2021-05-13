@@ -1,12 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { lazy, Suspense } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+// import "./App.css";
+import './assets/css/main.css'
+
+const JoinChat = lazy(() => import("./pages/JoinChat/JoinChat"));
+const CreateChat = lazy(() => import("./pages/CreateChat/CreateChat"));
+const Chat = lazy(() => import("./pages/Chat/Chat"));
+
 
 function App() {
   return (
-    <div className="App">
-      <h1>hello</h1>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={JoinChat} />
+          <Route exact path="/join" component={JoinChat} />
+          <Route exact path="/create" component={CreateChat} />
+          <Route path="/chat" component={Chat} />
+        </Switch>
+      </Router>
+    </Suspense>
   );
 }
 

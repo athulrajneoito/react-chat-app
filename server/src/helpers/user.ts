@@ -22,13 +22,28 @@ const addUser = async (userId: string, name: string, room: string) => {
 
 const getUser = async (userId: string) => {
     try {
-        const user = await Room.findOne({ "users": { $elemMatch: { id: userId } } }, { 'users.$': 1,'name':1 });
+        const user = await Room.findOne({ "users": { $elemMatch: { id: userId } } }, { 'users.$': 1, 'name': 1,'roomId':1  });
 
         if (user) {
-            return ({ err: false, data: user });
+            return user;
 
         } else {
-            return ({ err: 'User not found' });
+            return false;
+        }
+
+    } catch (error) {
+        return ({ err: error });
+    }
+}
+const getUserbyName = async (roomId: string, name: string) => {
+    try {
+        const user = await Room.findOne({ roomId, "users": { $elemMatch: { name: name } } }, { 'users.$': 1, 'name': 1,'roomId':1 });
+
+        if (user) {
+            return user;
+
+        } else {
+            return false;
         }
 
     } catch (error) {
@@ -51,5 +66,20 @@ const removeUser = async (name: string, room: string) => {
         return new Error(error)
     }
 }
+const saveMessage = async (roomId: string, message: any) => {
+    try {
+        const isRoom = await Room.findOne({ roomId: String(roomId).trim() });
+        if (isRoom) {
+            const id = isRoom._id;
+            const updated = await Room.findByIdAndUpdate(id, { $push: { messages: message } }, { new: true });
+            return ({ msg: 'User Remmoved', data: updated });
+        } else {
+            return ({ msg: 'Room not found' });
+        }
 
-export { addUser, removeUser, getUser };
+    } catch (error) {
+        return new Error(error)
+    }
+}
+
+export { addUser, removeUser, getUser, saveMessage, getUserbyName };

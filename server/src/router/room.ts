@@ -33,6 +33,18 @@ roomRouter.post('/createRoom', async (req: Request, res: Response) => {
         return res.status(500).send('Internal Server Error');
     }
 });
+roomRouter.post('/joinRoom', async (req: Request, res: Response) => {
+    try {
+        const { roomId } = req.body;
+        const room = await Room.findOne({ roomId });
+        if (room) {
+            return res.status(200).json({ data: room });
+        }
+        return res.status(404).json({ err: true, msg: 'Room Not found' });
+    } catch (error) {
+        return res.status(500).send('Internal Server Error');
+    }
+});
 
 roomRouter.patch('/addUser', async (req: Request, res: Response) => {
 
@@ -75,7 +87,7 @@ roomRouter.get('/getUser', async (req: Request, res: Response) => {
     const { room, userId } = req.body;
 
     try {
-        const user = await Room.findOne({ "users": { $elemMatch: { id: userId } } }, { 'users.$': 1,'name':1 });
+        const user = await Room.findOne({ "users": { $elemMatch: { id: userId } } }, { 'users.$': 1, 'name': 1 });
 
         if (user) {
             return res.send({ err: false, data: user });
@@ -83,6 +95,21 @@ roomRouter.get('/getUser', async (req: Request, res: Response) => {
         } else {
             return ({ err: 'User not found' });
         }
+
+    } catch (error) {
+        return ({ err: error });
+    }
+});
+roomRouter.get('/getMessages', async (req: Request, res: Response) => {
+    const { room } = req.query;
+    console.log(room);
+
+    try {
+        // @ts-ignore
+        const messages = await Room.findOne({ name: room }).select('messages');
+        return res.send({ err: false, data: messages });
+
+
 
     } catch (error) {
         return ({ err: error });

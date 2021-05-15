@@ -1,0 +1,5 @@
+.message-container{
+    height: calc(100vh - 108px);
+    overflow-y: auto;
+    position: relative;
+}

@@ -1,15 +1,23 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useHistory } from "react-router";
+import { joinRoom } from "../../service/chatSevice";
 
 const JoinChat = () => {
+  const history  = useHistory();
   const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
+  const [roomId, setRoom] = useState("");
 
   /**
    * Function to submit Form
    * @param event mouse click event
    */
-  const submitForm = (event: FormEvent) => {
+  const submitForm = async(event: FormEvent) => {
     event.preventDefault();
+    const res = await joinRoom(roomId);
+    console.log(res);
+    if(res){
+        history.push(`/chat?name=${name}&room=${res.data.name}&roomId=${res.data.roomId}`);
+    }
   };
 
   return (
@@ -22,8 +30,8 @@ const JoinChat = () => {
               onChange={(event: FormEvent<HTMLInputElement>) =>
                 setName(event.currentTarget.value)
               }
-              className="border rounded-md w-full  border-transparent focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent p-2"
-              placeholder="Name"
+              className="border text-black rounded-md w-full  border-transparent focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent p-2"
+              placeholder="User Name"
               type="text"
               name="name"
               id="name"
@@ -32,8 +40,8 @@ const JoinChat = () => {
               onChange={(event: FormEvent<HTMLInputElement>) =>
                 setRoom(event.currentTarget.value)
               }
-              className="border rounded-md w-full  border-transparent focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent p-2 mt-3"
-              placeholder="Room"
+              className="border text-black rounded-md w-full  border-transparent focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent p-2 mt-3"
+              placeholder="Room Id"
               type="text"
               name="room"
               id="room"
@@ -46,7 +54,7 @@ const JoinChat = () => {
           </form>
         </div>
       </div>
-      <button className="p-2 py-4 xl:w-1/3 md:w-2/3 w:1/2 bg-gray-500 text-white hover:bg-gray-700 cursor-pointer  mt-5 w-full rounded-md text-xl" type="submit">Create Chat Room</button>
+      <button onClick={()=>history.push('/create')} className="p-2 py-4 xl:w-1/3 md:w-2/3 w:1/2 bg-gray-500 text-white hover:bg-gray-700 cursor-pointer  mt-5 w-full rounded-md text-xl" type="submit">Create Chat Room</button>
     </div>
   );
 };

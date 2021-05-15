@@ -8,6 +8,7 @@ import { initialize } from './socket/socket';
 const app = express();
 
 // Middlewares
+app.use(cors());
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(compression());
@@ -17,7 +18,6 @@ app.use(chatRouter);
 app.use(roomRouter);
 
 
-app.use(cors());
 
 require('./db/mongoose');
 

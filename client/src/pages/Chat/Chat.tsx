@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router";
-import queryString, { ParsedQuery } from "query-string";
+import queryString from "query-string";
 import io from "socket.io-client";
 import { ENDPOINT } from "../../configs";
 import Header from "../../components/Header/Header";
@@ -30,7 +30,6 @@ const Chat = () => {
     socket = io(ENDPOINT);
     async function getAllMessages() {
       const msg = await getMessages(room);
-      console.log(msg.data.messages);
       setMessages((messages: any) => [...messages, ...msg.data.messages]);
     }
     setName(name);
@@ -69,10 +68,6 @@ const Chat = () => {
       block: "end",
       inline: "nearest",
     });
-    // messagesEndRef.current?.scrollTop({
-    //   top: height,
-    //   behavior: 'smooth'
-    // });
   };
   return (
     <>

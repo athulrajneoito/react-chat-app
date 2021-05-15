@@ -3,20 +3,24 @@ import { useHistory } from "react-router";
 import { joinRoom } from "../../service/chatSevice";
 
 const JoinChat = () => {
-  const history  = useHistory();
+  const history = useHistory();
   const [name, setName] = useState("");
   const [roomId, setRoom] = useState("");
-
+  const [showError, setShowError] = useState(false);
   /**
    * Function to submit Form
    * @param event mouse click event
    */
-  const submitForm = async(event: FormEvent) => {
+  const submitForm = async (event: FormEvent) => {
     event.preventDefault();
     const res = await joinRoom(roomId);
-    console.log(res);
-    if(res){
-        history.push(`/chat?name=${name}&room=${res.data.name}&roomId=${res.data.roomId}`);
+    if (res) {
+      setShowError(false);
+      history.push(
+        `/chat?name=${name}&room=${res.data.name}&roomId=${res.data.roomId}`
+      );
+    } else {
+      setShowError(true);
     }
   };
 
@@ -51,10 +55,17 @@ const JoinChat = () => {
               type="submit"
               value="Join"
             />
+            {showError && <p className="text-red-600">Invalid RoomId</p>  }
           </form>
         </div>
       </div>
-      <button onClick={()=>history.push('/create')} className="p-2 py-4 xl:w-1/3 md:w-2/3 w:1/2 bg-gray-500 text-white hover:bg-gray-700 cursor-pointer  mt-5 w-full rounded-md text-xl" type="submit">Create Chat Room</button>
+      <button
+        onClick={() => history.push("/create")}
+        className="container p-2 py-4 xl:w-1/3 md:w-2/3 w:1/2 bg-gray-500 text-white hover:bg-gray-700 cursor-pointer  mt-5 w-full rounded-md text-xl"
+        type="submit"
+      >
+        Create Chat Room
+      </button>
     </div>
   );
 };

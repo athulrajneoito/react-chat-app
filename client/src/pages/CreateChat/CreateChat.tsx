@@ -15,7 +15,6 @@ const CreateChat = () => {
   const submitForm = async (event: FormEvent) => {
     event.preventDefault();
     const res = await createChat(name, room);
-    console.log(res);
     setJoinId(res.data.roomId)
     
   };
@@ -61,7 +60,7 @@ const CreateChat = () => {
       </div>
       <button
         onClick={() => history.push("/")}
-        className="p-2 py-4 xl:w-1/3 md:w-2/3 w:1/2 bg-gray-500 text-white hover:bg-gray-700 cursor-pointer  mt-5 w-full rounded-md text-xl"
+        className="container p-2 py-4 xl:w-1/3 md:w-2/3 w:1/2 bg-gray-500 text-white hover:bg-gray-700 cursor-pointer  mt-5 w-full rounded-md text-xl"
       >
         Join Chat Room
       </button>

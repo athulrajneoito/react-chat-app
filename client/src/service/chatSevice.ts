@@ -13,8 +13,15 @@ export const getMessages = async (room: string) => {
 }
 
 export const joinRoom = async (roomId: string) => {
-   const res = await Axios.post(`${baseURL}/joinRoom`, { roomId });
-   return res.data;
+   try {
+      const res = await Axios.post(`${baseURL}/joinRoom`, { roomId });
+      return res.data;
+   } catch (error) {
+         console.error(error);
+         
+      
+   }
+
 
 }
 
